@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.record_view'|trans }} {{ shorten.id }}{% endblock %}
+
+{% block body %}
+    {% if shorten is defined %}
+        <h3>{{ 'label.id'|trans }}: {{ shorten.id }}</h3>
+        <h3>{{ 'label.shorten_in'|trans }}</h3>
+        <p>{{ shorten.shortenIn }}</p>
+        <h3>{{ 'label.shorten_out'|trans }}</h3>
+        <p>https://shortening.it/{{ shorten.shortenOut }}</p>
+        <h3>{{ 'label.add_date'|trans }}</h3>
+        <p>{{ shorten.addDate|date('Y-m-d') }}</p>
+        <h3>{{ 'label.click_counter'|trans }}</h3>
+        <p>{{ shorten.clickCounter }}</p>
+        <h3>{{ 'label.author'|trans }}</h3>
+        <p>{{ shorten.guest.guestEmail }}</p>
+        <h3>{{ 'label.tags'|trans }}</h3>
+        <p>{% for tag in shorten.tags %}
+                {{ tag.title }},
+            {% endfor %}</p>
+        <a href="{{ url('shorten_index') }}" title="{{ 'action.back_to_list'|trans }}">
+            {{ 'action.back_to_list'|trans }}
+        </a>
+    {% else %}
+        <p>{{ 'message.record_not_exist'|trans }}</p>
+    {%  endif %}
+{% endblock %}

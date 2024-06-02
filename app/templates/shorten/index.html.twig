@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.shorten_list'|trans }}{% endblock %}
+
+{% block login_section %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <span>{{ app.user.email }}</span>
+        <a href="{{ path('app_logout') }}" class="btn btn-danger ms-2">{{ 'action_logout'|trans }}</a>
+        <a href="{{ path('change_password') }}" class="btn btn-warning ms-2">{{ 'button.change_password'|trans }}</a>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="btn btn-primary ms-2">{{ 'action_login'|trans }}</a>
+    {% endif %}
+{% endblock %}
+
+{% block header_buttons %}
+    <a href="{{ path('shorten_create') }}" class="btn btn-outline-success ms-2">{{ 'button.action_create'|trans }}</a>
+    <a href="{{ path('shorten_index') }}" class="btn btn-outline-primary ms-2">{{ 'label.shortens'|trans }}</a>
+    <a href="{{ path('tag_index') }}" class="btn btn-outline-secondary ms-2">{{ 'label.tags'|trans }}</a>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ 'title.shorten_list'|trans }}</h1>
+
+    {% if pagination is defined and pagination.items|length %}
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 'shorten.id') }}</th>
+                <th>{{ 'label.shorten_in'|trans }}</th>
+                <th>{{ 'label.shorten_out'|trans }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.add_date'|trans, 'shorten.addDate') }}</th>
+                <th>{{ knp_pagination_sortable(pagination, 'label.click_counter'|trans, 'shorten.clickCounter') }}</th>
+                <th>{{ 'label.tags'|trans }}</th>
+                <th>{{ 'label.actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for shorten in pagination.items %}
+                <tr>
+                    <td>{{ shorten.id }}</td>
+                    <td>{{ shorten.shortenIn }}</td>
+                    <td><a href="https://shortening.it/{{ shorten.shortenOut }}" target="_blank">https://shortening.it/{{ shorten.shortenOut }}</a></td>
+                    <td>{{ shorten.addDate|date('Y/m/d') }}</td>
+                    <td>{{ shorten.clickCounter }}</td>
+                    <td>
+                        {% for tag in shorten.tags %}
+                            {{ tag.title }},
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-primary" href="{{ url('shorten_show', {id: shorten.id}) }}" title="{{ 'button.action_show'|trans }}">
+                            {{ 'button.action_show'|trans }}
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="btn btn-outline-success" href="{{ url('shorten_edit', {id: shorten.id}) }}" title="{{ 'button.action_edit'|trans }}">
+                                {{ 'button.action_edit'|trans }}
+                            </a>
+                            <a class="btn btn-outline-danger" href="{{ url('shorten_delete', {id: shorten.id}) }}" title="{{ 'button.action_delete'|trans }}">
+                                {{ 'button.action_delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% else %}
+        <p>{{ 'message.empty_list'|trans }}</p>
+    {% endif %}
+{% endblock %}

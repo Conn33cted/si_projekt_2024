@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'title.record_view'|trans }} {{ user.id }}{% endblock %}
+
+{% block body %}
+
+
+
+    {% if user is defined %}
+        <h3>{{ 'label.id'|trans }}: {{ user.id }}</h3>
+        <h3>{{ 'label.user_in'|trans }}</h3>
+        <p>{{ user.userIn }}</p>
+        {#        <h3>Komentarz</h3>#}
+        {#        <p>{{ user.comment }}</p>#}
+        <h3>{{ 'label.user_out'|trans }}</h3>
+        <p>{{ user.userOut }}</p>
+        <h3>{{ 'label.add_date'|trans }}</h3>
+        <p>{{ user.addDate|date('Y-m-d') }}</p>
+        <h3>{{ 'label.click_counter'|trans }}</h3>
+        <p>{{ user.clickCounter }}</p>
+        <a href="{{ url('user_index') }}" title="{{ 'action.back_to_list'|trans }}">
+            {{ 'action.back_to_list'|trans }}
+        </a>
+    {% else %}
+        <p>{{ 'message.record_not_exist'|trans }}</p>
+    {%  endif %}
+
+{% endblock %}
