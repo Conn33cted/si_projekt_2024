@@ -217,6 +217,13 @@
                 <target>Password</target>
             </trans-unit>
 
+
+            <trans-unit id="title.user_list">
+                <source>title.user_list</source>
+                <target>User list</target>
+            </trans-unit>
+
+
             <trans-unit id="title.user_delete">
                 <source>title.user_delete</source>
                 <target>Delete User</target>
@@ -331,6 +338,50 @@
             <trans-unit id="action.back_to_list_login">
                 <source>action.back_to_list_login</source>
                 <target>Back to List</target>
+            </trans-unit>
+            <trans-unit id="label.role">
+                <source>label.role</source>
+                <target>Role</target>
+            </trans-unit>
+            <trans-unit id="role.admin">
+                <source>role.admin</source>
+                <target>Administrator</target>
+            </trans-unit>
+            <trans-unit id="role.user">
+                <source>role.user</source>
+                <target>User</target>
+            </trans-unit>
+            <trans-unit id="message.creation_count">
+                <source>message.creation_count</source>
+                <target>You have created %count% shortened URLs today.</target>
+            </trans-unit>
+            <trans-unit id="message.limit_reached">
+                <source>message.limit_reached</source>
+                <target>You have reached your limit of creating shortened URLs for today.</target>
+            </trans-unit>
+            <trans-unit id="action_register">
+                <source>action_register</source>
+                <target>Register</target>
+            </trans-unit>
+            <trans-unit id="register.title">
+                <source>register.title</source>
+                <target>Register</target>
+            </trans-unit>
+            <trans-unit id="register.submit">
+                <source>register.submit</source>
+                <target>Register</target>
+            </trans-unit>
+            <trans-unit id="registrationForm.email">
+                <source>registrationForm.email</source>
+                <target>Email</target>
+            </trans-unit>
+            <trans-unit id="registrationForm.password.first">
+                <source>registrationForm.password.first</source>
+                <target>Password</target>
+            </trans-unit>
+            <trans-unit id="registrationForm.password.second">
+                <source>registrationForm.password.second</source>
+                <target>Repeat Password</target>
             </trans-unit>
         </body>
     </file>

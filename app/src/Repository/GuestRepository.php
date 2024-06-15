@@ -32,7 +32,7 @@ class GuestRepository extends ServiceEntityRepository
      * Function Save.
      *
      * @param Guest $entity Entity
-     * @param bool      $flush  Flush - false
+     * @param bool  $flush  Flush - false
      */
     public function save(Guest $entity, bool $flush = false): void
     {
@@ -47,7 +47,7 @@ class GuestRepository extends ServiceEntityRepository
      * Function Remove.
      *
      * @param Guest $entity Entity to remove
-     * @param bool      $flush  Flush
+     * @param bool  $flush  Flush
      */
     public function remove(Guest $entity, bool $flush = false): void
     {

@@ -20,11 +20,22 @@ class ShortenType extends AbstractType
 {
     private TagsDataTransformer $tagsDataTransformer;
 
+    /**
+     * Constructor.
+     *
+     * @param TagsDataTransformer $tagsDataTransformer Transformer for tags data
+     */
     public function __construct(TagsDataTransformer $tagsDataTransformer)
     {
         $this->tagsDataTransformer = $tagsDataTransformer;
     }
 
+    /**
+     * Build form.
+     *
+     * @param FormBuilderInterface $builder The form builder
+     * @param array<string, mixed> $options The form options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('shorten_in', TextType::class, [
@@ -53,11 +64,21 @@ class ShortenType extends AbstractType
         );
     }
 
+    /**
+     * Configure options.
+     *
+     * @param OptionsResolver $resolver The options resolver
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Shorten::class]);
     }
 
+    /**
+     * Get block prefix.
+     *
+     * @return string The block prefix
+     */
     public function getBlockPrefix(): string
     {
         return 'shorten';

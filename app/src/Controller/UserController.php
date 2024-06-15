@@ -6,7 +6,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Controller\IsGranted;
 use App\Form\Type\UserType;
 use App\Service\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,7 +67,7 @@ class UserController extends AbstractController
      *
      * @return Response HTTP response
      */
-    #[Route('/{id}', name: 'user_show', requirements: ['id' => '[1-9]\d*'], methods: 'GET', )]
+    #[Route('/{id}', name: 'user_show', requirements: ['id' => '[1-9]\d*'], methods: 'GET')]
     #[IsGranted('VIEW', subject: 'user')]
     public function show(User $user): Response
     {

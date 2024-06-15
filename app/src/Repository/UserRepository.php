@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-    public const PAGINATOR_ITEMS_PER_PAGE = 5;
+    public const PAGINATOR_ITEMS_PER_PAGE = 10;
 
     /**
      * Constructor.
@@ -100,7 +100,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      *
      * @return QueryBuilder Query builder
      */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    private function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder = null): QueryBuilder
     {
         return $queryBuilder ?? $this->createQueryBuilder('user');
     }

@@ -1,20 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'title.record_list'|trans }}{% endblock %}
+{% block title %}{{ 'title.user_list'|trans }}{% endblock %}
+
+{% block login_section %}
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <span>{{ app.user.email }}</span>
+        <a href="{{ path('app_logout') }}" class="btn btn-danger ms-2">{{ 'action_logout'|trans }}</a>
+        <a href="{{ path('change_password') }}" class="btn btn-warning ms-2">{{ 'button.change_password'|trans }}</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_index') }}" class="btn btn-info ms-2">{{ 'label.users'|trans }}</a>
+        {% endif %}
+    {% else %}
+        <a href="{{ path('app_login') }}" class="btn btn-primary ms-2">{{ 'action_login'|trans }}</a>
+    {% endif %}
+{% endblock %}
+
+{% block header_buttons %}
+    <a href="{{ path('user_create') }}" class="btn btn-outline-success ms-2">{{ 'button.action_create'|trans }}</a>
+    <a href="{{ path('shorten_index') }}" class="btn btn-outline-primary ms-2">{{ 'label.shortens'|trans }}</a>
+    <a href="{{ path('tag_index') }}" class="btn btn-outline-secondary ms-2">{{ 'label.tags'|trans }}</a>
+{% endblock %}
 
 {% block body %}
-
-    <ul class="nav">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ path('user_index') }}">{{ "label.useres"|trans }}</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" href="{{ path('tag_index') }}">{{ "label.tags"|trans }}</a>
-        </li>
-    </ul>
-
-    <h1>{{ 'title.record_list'|trans }}</h1>
-    <a href="{{ path('user_create') }}">{{ 'button.action_create'|trans }}</a>
+    <h1>{{ 'title.user_list'|trans }}</h1>
 
     {% if pagination is defined and pagination.items|length %}
         <div class="navigation text-center">
@@ -26,19 +34,23 @@
             <tr>
                 <th>{{ knp_pagination_sortable(pagination, 'label.id'|trans, 'user.id') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label.email'|trans, 'user.email') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label.password'|trans, 'user.password') }}</th>
+                <th>{{ 'label.role'|trans }}</th>
                 <th>{{ 'label.actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
-
             {% for user in pagination.items %}
                 <tr>
                     <td>{{ user.id }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.password }}</td>
                     <td>
-
+                        {% if 'ROLE_ADMIN' in user.roles or user.email starts with 'admin' %}
+                            {{ 'role.admin'|trans }}
+                        {% else %}
+                            {{ 'role.user'|trans }}
+                        {% endif %}
+                    </td>
+                    <td>
                         <a class="btn btn-outline-primary" href="{{ url('user_show', {id: user.id}) }}" title="{{ 'button.action_show'|trans }}">
                             {{ 'button.action_show'|trans }}
                         </a>
@@ -57,9 +69,7 @@
         <div class="navigation text-center">
             {{ knp_pagination_render(pagination) }}
         </div>
-
     {% else %}
         <p>{{ 'message.empty_list'|trans }}</p>
-    {%  endif %}
-
+    {% endif %}
 {% endblock %}

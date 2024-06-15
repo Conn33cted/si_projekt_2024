@@ -7,8 +7,12 @@
         <span>{{ app.user.email }}</span>
         <a href="{{ path('app_logout') }}" class="btn btn-danger ms-2">{{ 'action_logout'|trans }}</a>
         <a href="{{ path('change_password') }}" class="btn btn-warning ms-2">{{ 'button.change_password'|trans }}</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_index') }}" class="btn btn-info ms-2">{{ 'label.users'|trans }}</a>
+        {% endif %}
     {% else %}
         <a href="{{ path('app_login') }}" class="btn btn-primary ms-2">{{ 'action_login'|trans }}</a>
+        <a href="{{ path('app_register') }}" class="btn btn-success ms-2">{{ 'action_register'|trans }}</a>
     {% endif %}
 {% endblock %}
 
@@ -20,6 +24,36 @@
 
 {% block body %}
     <h1>{{ 'title.shorten_list'|trans }}</h1>
+
+    {% for flash_message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {% for flash_message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {% for flash_message in app.flashes('info') %}
+        <div class="alert alert-info">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {% for flash_message in app.flashes('warning') %}
+        <div class="alert alert-warning">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {#
+    <div class="alert alert-info">
+        {{ 'message.creation_count'|trans({'%count%': creation_count}) }}
+    </div>
+    #}
 
     {% if pagination is defined and pagination.items|length %}
         <div class="navigation text-center">
@@ -43,12 +77,12 @@
                 <tr>
                     <td>{{ shorten.id }}</td>
                     <td>{{ shorten.shortenIn }}</td>
-                    <td><a href="https://shortening.it/{{ shorten.shortenOut }}" target="_blank">https://shortening.it/{{ shorten.shortenOut }}</a></td>
+                    <td><a href="{{ path('link_index', {shortenOut: shorten.shortenOut}) }}" target="_blank">https://shortening.it/{{ shorten.shortenOut }}</a></td>
                     <td>{{ shorten.addDate|date('Y/m/d') }}</td>
                     <td>{{ shorten.clickCounter }}</td>
                     <td>
                         {% for tag in shorten.tags %}
-                            {{ tag.title }},
+                            <a class="btn btn-outline-primary btn-sm" href="{{ path('tag_show', {id: tag.id}) }}">{{ tag.title }}</a>
                         {% endfor %}
                     </td>
                     <td>

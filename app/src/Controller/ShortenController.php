@@ -1,22 +1,23 @@
 <?php
+
 /**
- * Shorten controller.
+ * Shorten Controller
  */
 
 namespace App\Controller;
 
 use App\Entity\Shorten;
 use App\Entity\Guest;
-use App\Entity\User;
 use App\Form\Type\ShortenType;
 use App\Repository\GuestRepository;
 use App\Service\ShortenServiceInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -28,14 +29,31 @@ class ShortenController extends AbstractController
     private ShortenServiceInterface $shortenService;
     private TranslatorInterface $translator;
     private GuestRepository $guestRepository;
+    private $session;
 
-    public function __construct(ShortenServiceInterface $shortenService, TranslatorInterface $translator, GuestRepository $guestRepository)
+    /**
+     * Constructor.
+     *
+     * @param ShortenServiceInterface $shortenService
+     * @param TranslatorInterface     $translator
+     * @param GuestRepository         $guestRepository
+     * @param RequestStack            $requestStack
+     */
+    public function __construct(ShortenServiceInterface $shortenService, TranslatorInterface $translator, GuestRepository $guestRepository, RequestStack $requestStack)
     {
         $this->shortenService = $shortenService;
         $this->translator = $translator;
         $this->guestRepository = $guestRepository;
+        $this->session = $requestStack->getSession();
     }
 
+    /**
+     * Index action.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     #[Route(name: 'shorten_index', methods: 'GET')]
     public function index(Request $request): Response
     {
@@ -43,18 +61,56 @@ class ShortenController extends AbstractController
             $request->query->getInt('page', 1),
         );
 
-        return $this->render('shorten/index.html.twig', ['pagination' => $pagination]);
+        return $this->render('shorten/index.html.twig', [
+            'pagination' => $pagination,
+            'creation_count' => $this->getCreationCount(),
+        ]);
     }
 
+    /**
+     * Show action.
+     *
+     * @param Shorten $shorten
+     *
+     * @return Response
+     */
     #[Route('/{id}', name: 'shorten_show', requirements: ['id' => '[1-9]\d*'], methods: 'GET')]
     public function show(Shorten $shorten): Response
     {
-        return $this->render('shorten/show.html.twig', ['shorten' => $shorten]);
+        return $this->render('shorten/show.html.twig', [
+            'shorten' => $shorten,
+            'creation_count' => $this->getCreationCount(),
+        ]);
     }
 
+    /**
+     * Create action.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     #[Route('/create', name: 'shorten_create', methods: 'GET|POST')]
     public function create(Request $request): Response
     {
+        $creationCount = 0;
+        if (!$this->getUser()) {
+            $currentTimestamp = time();
+            $creationData = $this->session->get('shorten_creation_data', ['count' => 0, 'timestamp' => $currentTimestamp]);
+
+            if ($currentTimestamp - $creationData['timestamp'] >= 86400) {
+                $creationData = ['count' => 0, 'timestamp' => $currentTimestamp];
+            }
+
+            $creationCount = $creationData['count'];
+
+            if ($creationData['count'] >= 2) {
+                $this->addFlash('warning', $this->translator->trans('message.limit_reached'));
+
+                return $this->redirectToRoute('shorten_index');
+            }
+        }
+
         $shorten = new Shorten();
         $form = $this->createForm(
             ShortenType::class,
@@ -64,11 +120,17 @@ class ShortenController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$this->getUser()) {
+                ++$creationData['count'];
+                $creationData['timestamp'] = $currentTimestamp;
+                $this->session->set('shorten_creation_data', $creationData);
+            }
+
             $newGuest = new Guest();
             $newGuest->setGuestEmail($form->get('guest')->getData());
             $this->guestRepository->save($newGuest);
             $shorten->setGuest($newGuest);
-            $shorten->setShortenOut(rand(0001, 9999));
+            $shorten->setShortenOut(rand(1, 9999));
             $shorten->setAddDate(new \DateTime('now'));
             $shorten->setClickCounter(0);
             $this->shortenService->save($shorten);
@@ -83,12 +145,23 @@ class ShortenController extends AbstractController
 
         return $this->render(
             'shorten/create.html.twig',
-            ['form' => $form->createView()]
+            [
+                'form' => $form->createView(),
+                'creation_count' => $creationCount,
+            ]
         );
     }
 
+    /**
+     * Edit action.
+     *
+     * @param Request $request
+     * @param Shorten $shorten
+     *
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'shorten_edit', requirements: ['id' => '[1-9]\d*'], methods: 'GET|PUT')]
-    #[IsGranted('ROLE_ADMIN', subject: 'shorten')]
+    #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Shorten $shorten): Response
     {
         $form = $this->createForm(
@@ -117,12 +190,21 @@ class ShortenController extends AbstractController
             [
                 'form' => $form->createView(),
                 'shorten' => $shorten,
+                'creation_count' => $this->getCreationCount(),
             ]
         );
     }
 
+    /**
+     * Delete action.
+     *
+     * @param Request $request
+     * @param Shorten $shorten
+     *
+     * @return Response
+     */
     #[Route('/{id}/delete', name: 'shorten_delete', requirements: ['id' => '[1-9]\d*'], methods: 'GET|DELETE')]
-    #[IsGranted('ROLE_ADMIN', subject: 'shorten')]
+    #[IsGranted('ROLE_USER')]
     public function delete(Request $request, Shorten $shorten): Response
     {
         $form = $this->createForm(
@@ -151,7 +233,20 @@ class ShortenController extends AbstractController
             [
                 'form' => $form->createView(),
                 'shorten' => $shorten,
+                'creation_count' => $this->getCreationCount(),
             ]
         );
+    }
+
+    /**
+     * Get the creation count from the session.
+     *
+     * @return int
+     */
+    private function getCreationCount(): int
+    {
+        $creationData = $this->session->get('shorten_creation_data', ['count' => 0, 'timestamp' => time()]);
+
+        return $creationData['count'];
     }
 }

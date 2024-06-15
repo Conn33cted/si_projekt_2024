@@ -57,9 +57,9 @@ class ShortenRepository extends ServiceEntityRepository
     }
 
     /**
-     * Function save.
+     * Save the Shorten entity.
      *
-     * @param Shorten $shorten Shorten to save
+     * @param Shorten $shorten Shorten entity to save
      */
     public function save(Shorten $shorten): void
     {
@@ -68,16 +68,25 @@ class ShortenRepository extends ServiceEntityRepository
     }
 
     /**
-     * Function delete.
+     * Delete the Shorten entity.
      *
-     * @param Shorten $shorten Shorten to remove
-     *
-     * @return void
+     * @param Shorten $shorten Shorten entity to remove
      */
-    public function delete(Shorten $shorten)
+    public function delete(Shorten $shorten): void
     {
         $this->_em->remove($shorten);
         $this->_em->flush();
+    }
+
+    /**
+     * Increment the click counter for a Shorten entity.
+     *
+     * @param Shorten $shorten Shorten entity
+     */
+    public function incrementClickCounter(Shorten $shorten): void
+    {
+        $shorten->setClickCounter($shorten->getClickCounter() + 1);
+        $this->save($shorten);
     }
 
     /**
@@ -87,7 +96,7 @@ class ShortenRepository extends ServiceEntityRepository
      *
      * @return QueryBuilder Query builder
      */
-    private function getOrCreateQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    private function getOrCreateQueryBuilder(?QueryBuilder $queryBuilder = null): QueryBuilder
     {
         return $queryBuilder ?? $this->createQueryBuilder('shorten');
     }

@@ -20,7 +20,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->symfonyContainerXml(__DIR__.'/var/cache/dev/App_KernelDevDebugContainer.xml');
 
-    // register a single rule
+    // registration a single rule
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
 
     $rectorConfig->sets([

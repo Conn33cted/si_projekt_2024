@@ -13,10 +13,12 @@
         <h3>{{ 'label.updated_at'|trans }}</h3>
         <p>{{ record.updatedAt|date('Y-m-d') }}</p>
         <h3>{{ 'label.shorten_to_tag'|trans }}</h3>
-        <p>{% for shorten in record.shorten %}
-                {{ shorten.shortenIn }},
-            {% endfor %}</p>
-        <a href="{{ url('tag_index') }}" title="{{ 'action.back_to_list'|trans }}">
+        <p>
+            {% for shorten in record.shorten %}
+                <a href="{{ path('link_index', {shortenOut: shorten.shortenOut}) }}" target="_blank">{{ shorten.shortenIn }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <a href="{{ path('tag_index') }}" title="{{ 'action.back_to_list'|trans }}">
             {{ 'action.back_to_list'|trans }}
         </a>
     {% else %}

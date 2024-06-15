@@ -28,7 +28,7 @@ class ShortenService implements ShortenServiceInterface
     /**
      * Constructor.
      *
-     * @param ShortenRepository   $shortenRepository Shorten repository
+     * @param ShortenRepository  $shortenRepository Shorten repository
      * @param PaginatorInterface $paginator         Paginator
      */
     public function __construct(ShortenRepository $shortenRepository, PaginatorInterface $paginator)

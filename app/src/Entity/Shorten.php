@@ -38,8 +38,6 @@ class Shorten
 
     /**
      * Guest.
-     *
-     * @var Guest
      */
     #[Assert\Valid]
     #[ORM\ManyToOne(targetEntity: Guest::class, fetch: 'EXTRA_LAZY')]
