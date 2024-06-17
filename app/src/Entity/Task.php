@@ -138,6 +138,8 @@ class Task
      * Setter for category.
      *
      * @param Category|null $category Category
+     *
+     * @return $this
      */
     public function setCategory(?Category $category): static
     {
