@@ -109,8 +109,6 @@ class Shorten
      * Set shorten input.
      *
      * @param string $shortenIn Shorten input
-     *
-     * @return self
      */
     public function setShortenIn(string $shortenIn): self
     {
@@ -133,8 +131,6 @@ class Shorten
      * Set shorten output.
      *
      * @param string $shortenOut Shorten output
-     *
-     * @return self
      */
     public function setShortenOut(string $shortenOut): self
     {
@@ -157,8 +153,6 @@ class Shorten
      * Set addition date.
      *
      * @param \DateTimeInterface $addDate Addition date
-     *
-     * @return self
      */
     public function setAddDate(\DateTimeInterface $addDate): self
     {
@@ -181,8 +175,6 @@ class Shorten
      * Set user.
      *
      * @param User|null $user User
-     *
-     * @return self
      */
     public function setUser(?User $user): self
     {
@@ -205,8 +197,6 @@ class Shorten
      * Set guest.
      *
      * @param Guest|null $guest Guest
-     *
-     * @return self
      */
     public function setGuest(?Guest $guest): self
     {
@@ -229,8 +219,6 @@ class Shorten
      * Add tag.
      *
      * @param Tag $tag Tag
-     *
-     * @return self
      */
     public function addTag(Tag $tag): self
     {
@@ -246,8 +234,6 @@ class Shorten
      * Remove tag.
      *
      * @param Tag $tag Tag
-     *
-     * @return self
      */
     public function removeTag(Tag $tag): self
     {
@@ -272,8 +258,6 @@ class Shorten
      * Set click counter.
      *
      * @param int $clickCounter Click counter
-     *
-     * @return self
      */
     public function setClickCounter(int $clickCounter): self
     {
@@ -296,8 +280,6 @@ class Shorten
      * Set blocked status.
      *
      * @param bool $isBlocked Blocked status
-     *
-     * @return self
      */
     public function setBlocked(bool $isBlocked): self
     {
