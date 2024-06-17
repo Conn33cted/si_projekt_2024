@@ -18,20 +18,35 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ShortenRepository::class)]
 class Shorten
 {
+    /**
+     * Primary key.
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * Shorten input.
+     */
     #[ORM\Column(length: 255)]
     private ?string $shortenIn = null;
 
+    /**
+     * Shorten output.
+     */
     #[ORM\Column(length: 191, unique: true)]
     private ?string $shortenOut = null;
 
+    /**
+     * Addition date.
+     */
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $addDate = null;
 
+    /**
+     * User.
+     */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
@@ -44,14 +59,26 @@ class Shorten
     #[ORM\JoinTable(name: 'shorten_guest')]
     private ?Guest $guest = null;
 
+    /**
+     * Tags.
+     */
     #[ORM\ManyToMany(targetEntity: Tag::class, mappedBy: 'shorten')]
     private Collection $tags;
 
+    /**
+     * Click counter.
+     */
     #[ORM\Column]
     private ?int $clickCounter = null;
 
     /**
-     *Constructor.
+     * Blocked status.
+     */
+    #[ORM\Column(type: 'boolean')]
+    private bool $isBlocked = false;
+
+    /**
+     * Constructor.
      */
     public function __construct()
     {
@@ -59,9 +86,9 @@ class Shorten
     }
 
     /**
-     * Function get Id.
+     * Get id.
      *
-     * @return int|null Return Id
+     * @return int|null Id
      */
     public function getId(): ?int
     {
@@ -69,9 +96,9 @@ class Shorten
     }
 
     /**
-     * Function Get Shorten In.
+     * Get shorten input.
      *
-     * @return string|null Return Shorten In
+     * @return string|null Shorten input
      */
     public function getShortenIn(): ?string
     {
@@ -79,11 +106,11 @@ class Shorten
     }
 
     /**
-     * Function Set Shorten In.
+     * Set shorten input.
      *
-     * @param string $shortenIn New Shorten In
+     * @param string $shortenIn Shorten input
      *
-     * @return $this Return this
+     * @return self
      */
     public function setShortenIn(string $shortenIn): self
     {
@@ -93,9 +120,9 @@ class Shorten
     }
 
     /**
-     * Function get Shorten Out.
+     * Get shorten output.
      *
-     * @return string|null Return shorten out
+     * @return string|null Shorten output
      */
     public function getShortenOut(): ?string
     {
@@ -103,11 +130,11 @@ class Shorten
     }
 
     /**
-     * Function Set Shorten Out.
+     * Set shorten output.
      *
-     * @param string $shortenOut New Shorten Out
+     * @param string $shortenOut Shorten output
      *
-     * @return $this Return entity
+     * @return self
      */
     public function setShortenOut(string $shortenOut): self
     {
@@ -117,9 +144,9 @@ class Shorten
     }
 
     /**
-     * Function get Add Date.
+     * Get addition date.
      *
-     * @return \DateTimeImmutable|null Return addDate
+     * @return \DateTimeInterface|null Addition date
      */
     public function getAddDate(): ?\DateTimeInterface
     {
@@ -127,11 +154,11 @@ class Shorten
     }
 
     /**
-     * Function Set Add Date.
+     * Set addition date.
      *
-     * @param \DateTimeInterface $addDate New Add Date
+     * @param \DateTimeInterface $addDate Addition date
      *
-     * @return $this Return Entity
+     * @return self
      */
     public function setAddDate(\DateTimeInterface $addDate): self
     {
@@ -141,9 +168,9 @@ class Shorten
     }
 
     /**
-     * Function Get User.
+     * Get user.
      *
-     * @return User|null Return User
+     * @return User|null User
      */
     public function getUser(): ?User
     {
@@ -151,11 +178,11 @@ class Shorten
     }
 
     /**
-     * Function Set User.
+     * Set user.
      *
-     * @param User|null $user New User
+     * @param User|null $user User
      *
-     * @return $this Return Entity
+     * @return self
      */
     public function setUser(?User $user): self
     {
@@ -165,9 +192,9 @@ class Shorten
     }
 
     /**
-     * Function get Guest User.
+     * Get guest user.
      *
-     * @return Guest|null Return Guest
+     * @return Guest|null Guest
      */
     public function getGuest(): ?Guest
     {
@@ -175,11 +202,11 @@ class Shorten
     }
 
     /**
-     * Function Set Guest.
+     * Set guest.
      *
      * @param Guest|null $guest Guest
      *
-     * @return $this Return Entity
+     * @return self
      */
     public function setGuest(?Guest $guest): self
     {
@@ -189,7 +216,9 @@ class Shorten
     }
 
     /**
-     * @return Collection<int, Tag> Return Tags
+     * Get tags.
+     *
+     * @return Collection<int, Tag> Tags
      */
     public function getTags(): Collection
     {
@@ -197,11 +226,11 @@ class Shorten
     }
 
     /**
-     * Function Add Tag.
+     * Add tag.
      *
-     * @param Tag $tag New Tag
+     * @param Tag $tag Tag
      *
-     * @return $this Return Entity
+     * @return self
      */
     public function addTag(Tag $tag): self
     {
@@ -214,11 +243,11 @@ class Shorten
     }
 
     /**
-     * Function Remove Tag.
+     * Remove tag.
      *
-     * @param Tag $tag Tag To Remove
+     * @param Tag $tag Tag
      *
-     * @return $this Return entity
+     * @return self
      */
     public function removeTag(Tag $tag): self
     {
@@ -230,9 +259,9 @@ class Shorten
     }
 
     /**
-     * Function get Click Counter.
+     * Get click counter.
      *
-     * @return int|null Return ClickCounter
+     * @return int|null Click counter
      */
     public function getClickCounter(): ?int
     {
@@ -240,15 +269,39 @@ class Shorten
     }
 
     /**
-     * Function Set Click Counter.
+     * Set click counter.
      *
-     * @param int $clickCounter New Number
+     * @param int $clickCounter Click counter
      *
-     * @return $this Return Entity
+     * @return self
      */
     public function setClickCounter(int $clickCounter): self
     {
         $this->clickCounter = $clickCounter;
+
+        return $this;
+    }
+
+    /**
+     * Get blocked status.
+     *
+     * @return bool Blocked status
+     */
+    public function isBlocked(): bool
+    {
+        return $this->isBlocked;
+    }
+
+    /**
+     * Set blocked status.
+     *
+     * @param bool $isBlocked Blocked status
+     *
+     * @return self
+     */
+    public function setBlocked(bool $isBlocked): self
+    {
+        $this->isBlocked = $isBlocked;
 
         return $this;
     }

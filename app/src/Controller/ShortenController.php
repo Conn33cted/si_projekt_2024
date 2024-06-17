@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Shorten Controller
+ * Shorten Controller.
  */
 
 namespace App\Controller;
@@ -34,10 +34,10 @@ class ShortenController extends AbstractController
     /**
      * Constructor.
      *
-     * @param ShortenServiceInterface $shortenService
-     * @param TranslatorInterface     $translator
-     * @param GuestRepository         $guestRepository
-     * @param RequestStack            $requestStack
+     * @param ShortenServiceInterface $shortenService  Shorten service
+     * @param TranslatorInterface     $translator      Translator
+     * @param GuestRepository         $guestRepository Guest repository
+     * @param RequestStack            $requestStack    Request stack
      */
     public function __construct(ShortenServiceInterface $shortenService, TranslatorInterface $translator, GuestRepository $guestRepository, RequestStack $requestStack)
     {
@@ -50,16 +50,14 @@ class ShortenController extends AbstractController
     /**
      * Index action.
      *
-     * @param Request $request
+     * @param Request $request HTTP request
      *
-     * @return Response
+     * @return Response HTTP response
      */
     #[Route(name: 'shorten_index', methods: 'GET')]
     public function index(Request $request): Response
     {
-        $pagination = $this->shortenService->getPaginatedList(
-            $request->query->getInt('page', 1),
-        );
+        $pagination = $this->shortenService->getPaginatedList($request->query->getInt('page', 1));
 
         return $this->render('shorten/index.html.twig', [
             'pagination' => $pagination,
@@ -70,9 +68,9 @@ class ShortenController extends AbstractController
     /**
      * Show action.
      *
-     * @param Shorten $shorten
+     * @param Shorten $shorten Shorten entity
      *
-     * @return Response
+     * @return Response HTTP response
      */
     #[Route('/{id}', name: 'shorten_show', requirements: ['id' => '[1-9]\d*'], methods: 'GET')]
     public function show(Shorten $shorten): Response
@@ -86,9 +84,9 @@ class ShortenController extends AbstractController
     /**
      * Create action.
      *
-     * @param Request $request
+     * @param Request $request HTTP request
      *
-     * @return Response
+     * @return Response HTTP response
      */
     #[Route('/create', name: 'shorten_create', methods: 'GET|POST')]
     public function create(Request $request): Response
@@ -112,11 +110,8 @@ class ShortenController extends AbstractController
         }
 
         $shorten = new Shorten();
-        $form = $this->createForm(
-            ShortenType::class,
-            $shorten,
-            ['action' => $this->generateUrl('shorten_create')]
-        );
+        $shorten->setUser($this->getUser());
+        $form = $this->createForm(ShortenType::class, $shorten, ['action' => $this->generateUrl('shorten_create')]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -135,113 +130,129 @@ class ShortenController extends AbstractController
             $shorten->setClickCounter(0);
             $this->shortenService->save($shorten);
 
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.created_successfully')
-            );
+            $this->addFlash('success', $this->translator->trans('message.created_successfully'));
 
             return $this->redirectToRoute('shorten_index');
         }
 
-        return $this->render(
-            'shorten/create.html.twig',
-            [
-                'form' => $form->createView(),
-                'creation_count' => $creationCount,
-            ]
-        );
+        return $this->render('shorten/create.html.twig', [
+            'form' => $form->createView(),
+            'creation_count' => $creationCount,
+        ]);
     }
 
     /**
      * Edit action.
      *
-     * @param Request $request
-     * @param Shorten $shorten
+     * @param Request $request HTTP request
+     * @param Shorten $shorten Shorten entity
      *
-     * @return Response
+     * @return Response HTTP response
      */
     #[Route('/{id}/edit', name: 'shorten_edit', requirements: ['id' => '[1-9]\d*'], methods: 'GET|PUT')]
     #[IsGranted('ROLE_USER')]
     public function edit(Request $request, Shorten $shorten): Response
     {
-        $form = $this->createForm(
-            ShortenType::class,
-            $shorten,
-            [
-                'method' => 'PUT',
-                'action' => $this->generateUrl('shorten_edit', ['id' => $shorten->getId()]),
-            ]
-        );
+        $this->denyAccessUnlessGranted('EDIT', $shorten);
+
+        $form = $this->createForm(ShortenType::class, $shorten, [
+            'method' => 'PUT',
+            'action' => $this->generateUrl('shorten_edit', ['id' => $shorten->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->shortenService->save($shorten);
 
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.edited_successfully')
-            );
+            $this->addFlash('success', $this->translator->trans('message.edited_successfully'));
 
             return $this->redirectToRoute('shorten_index');
         }
 
-        return $this->render(
-            'shorten/edit.html.twig',
-            [
-                'form' => $form->createView(),
-                'shorten' => $shorten,
-                'creation_count' => $this->getCreationCount(),
-            ]
-        );
+        return $this->render('shorten/edit.html.twig', [
+            'form' => $form->createView(),
+            'shorten' => $shorten,
+            'creation_count' => $this->getCreationCount(),
+        ]);
     }
 
     /**
      * Delete action.
      *
-     * @param Request $request
-     * @param Shorten $shorten
+     * @param Request $request HTTP request
+     * @param Shorten $shorten Shorten entity
      *
-     * @return Response
+     * @return Response HTTP response
      */
     #[Route('/{id}/delete', name: 'shorten_delete', requirements: ['id' => '[1-9]\d*'], methods: 'GET|DELETE')]
     #[IsGranted('ROLE_USER')]
     public function delete(Request $request, Shorten $shorten): Response
     {
-        $form = $this->createForm(
-            FormType::class,
-            $shorten,
-            [
-                'method' => 'DELETE',
-                'action' => $this->generateUrl('shorten_delete', ['id' => $shorten->getId()]),
-            ]
-        );
+        $this->denyAccessUnlessGranted('DELETE', $shorten);
+
+        $form = $this->createForm(FormType::class, $shorten, [
+            'method' => 'DELETE',
+            'action' => $this->generateUrl('shorten_delete', ['id' => $shorten->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->shortenService->delete($shorten);
 
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.deleted_successfully')
-            );
+            $this->addFlash('success', $this->translator->trans('message.deleted_successfully'));
 
             return $this->redirectToRoute('shorten_index');
         }
 
-        return $this->render(
-            'shorten/delete.html.twig',
-            [
-                'form' => $form->createView(),
-                'shorten' => $shorten,
-                'creation_count' => $this->getCreationCount(),
-            ]
-        );
+        return $this->render('shorten/delete.html.twig', [
+            'form' => $form->createView(),
+            'shorten' => $shorten,
+            'creation_count' => $this->getCreationCount(),
+        ]);
     }
 
     /**
-     * Get the creation count from the session.
+     * Block action.
      *
-     * @return int
+     * @param Shorten $shorten Shorten entity
+     *
+     * @return Response HTTP response
+     */
+    #[Route('/{id}/block', name: 'shorten_block', requirements: ['id' => '[1-9]\d*'], methods: 'POST')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function block(Shorten $shorten): Response
+    {
+        $shorten->setBlocked(true);
+        $this->shortenService->save($shorten);
+
+        $this->addFlash('success', $this->translator->trans('message.blocked_successfully'));
+
+        return $this->redirectToRoute('shorten_index');
+    }
+
+    /**
+     * Unblock action.
+     *
+     * @param Shorten $shorten Shorten entity
+     *
+     * @return Response HTTP response
+     */
+    #[Route('/{id}/unblock', name: 'shorten_unblock', requirements: ['id' => '[1-9]\d*'], methods: 'POST')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function unblock(Shorten $shorten): Response
+    {
+        $shorten->setBlocked(false);
+        $this->shortenService->save($shorten);
+
+        $this->addFlash('success', $this->translator->trans('message.unblocked_successfully'));
+
+        return $this->redirectToRoute('shorten_index');
+    }
+
+    /**
+     * Session creation count.
+     *
+     * @return int Creation count
      */
     private function getCreationCount(): int
     {

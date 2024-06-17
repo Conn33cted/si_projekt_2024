@@ -72,4 +72,24 @@ class ShortenService implements ShortenServiceInterface
     {
         $this->shortenRepository->delete($shorten);
     }
+
+    /**
+     * Find entity by shortenOut.
+     *
+     * @param string $shortenOut Shorten output
+     *
+     * @return Shorten|null Shorten entity
+     *
+     * @throws \Exception If the link is blocked
+     */
+    public function findByShortenOut(string $shortenOut): ?Shorten
+    {
+        $shorten = $this->shortenRepository->findOneBy(['shortenOut' => $shortenOut]);
+
+        if ($shorten && $shorten->isBlocked()) {
+            throw new \Exception('This link is blocked.');
+        }
+
+        return $shorten;
+    }
 }

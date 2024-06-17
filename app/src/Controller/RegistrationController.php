@@ -1,6 +1,6 @@
 <?php
 /**
-    Registration Controller
+ * Registration Controller.
  */
 
 namespace App\Controller;

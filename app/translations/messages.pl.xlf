@@ -382,6 +382,30 @@
                 <source>registrationForm.password.second</source>
                 <target>Powtórz hasło</target>
             </trans-unit>
+            <trans-unit id="message.link_not_found">
+                <source>message.link_not_found</source>
+                <target>Link nie znaleziony.</target>
+            </trans-unit>
+            <trans-unit id="message.link_blocked">
+                <source>message.link_blocked</source>
+                <target>Ten link jest zablokowany.</target>
+            </trans-unit>
+            <trans-unit id="button.action_block">
+                <source>button.action_block</source>
+                <target>Zablokuj</target>
+            </trans-unit>
+            <trans-unit id="button.action_unblock">
+                <source>button.action_unblock</source>
+                <target>Odblokuj</target>
+            </trans-unit>
+            <trans-unit id="message.blocked_successfully">
+                <source>message.blocked_successfully</source>
+                <target>Zablokowano link</target>
+            </trans-unit>
+            <trans-unit id="message.unblocked_successfully">
+                <source>message.unblocked_successfully</source>
+                <target>Odblokowano link</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

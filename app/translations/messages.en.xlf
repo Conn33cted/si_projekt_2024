@@ -383,6 +383,30 @@
                 <source>registrationForm.password.second</source>
                 <target>Repeat Password</target>
             </trans-unit>
+            <trans-unit id="message.link_not_found">
+                <source>message.link_not_found</source>
+                <target>Link not found.</target>
+            </trans-unit>
+            <trans-unit id="message.link_blocked">
+                <source>message.link_blocked</source>
+                <target>This link is blocked.</target>
+            </trans-unit>
+            <trans-unit id="button.action_block">
+                <source>button.action_block</source>
+                <target>Block</target>
+            </trans-unit>
+            <trans-unit id="button.action_unblock">
+                <source>button.action_unblock</source>
+                <target>Unblock</target>
+            </trans-unit>
+            <trans-unit id="message.blocked_successfully">
+                <source>message.blocked_successfully</source>
+                <target>Link blocked successfully</target>
+            </trans-unit>
+            <trans-unit id="message.unblocked_successfully">
+                <source>message.unblocked_successfully</source>
+                <target>Link unblocked successfully</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

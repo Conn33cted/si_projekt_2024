@@ -9,23 +9,27 @@ use App\Repository\ShortenRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- *Class LinkController.
+ * Class LinkController.
  */
 #[Route('/link')]
 class LinkController extends AbstractController
 {
     private ShortenRepository $shortenRepository;
+    private TranslatorInterface $translator;
 
     /**
      * Constructor.
      *
-     * @param ShortenRepository $shortenRepository Shorten repository
+     * @param ShortenRepository   $shortenRepository Shorten repository
+     * @param TranslatorInterface $translator        Translator
      */
-    public function __construct(ShortenRepository $shortenRepository)
+    public function __construct(ShortenRepository $shortenRepository, TranslatorInterface $translator)
     {
         $this->shortenRepository = $shortenRepository;
+        $this->translator = $translator;
     }
 
     /**
@@ -47,6 +51,14 @@ class LinkController extends AbstractController
         $shorten = $this->shortenRepository->findOneBy(['shortenOut' => $shortenOut]);
 
         if (!$shorten) {
+            $this->addFlash('warning', $this->translator->trans('message.link_not_found'));
+
+            return $this->redirectToRoute('shorten_index');
+        }
+
+        if ($shorten->isBlocked()) {
+            $this->addFlash('warning', $this->translator->trans('message.link_blocked'));
+
             return $this->redirectToRoute('shorten_index');
         }
 
