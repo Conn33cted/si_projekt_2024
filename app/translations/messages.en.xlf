@@ -407,6 +407,14 @@
                 <source>message.unblocked_successfully</source>
                 <target>Link unblocked successfully</target>
             </trans-unit>
+            <trans-unit id="tag.title">
+                <source>tag.title</source>
+                <target>Edit tag title</target>
+            </trans-unit>
+            <trans-unit id="label.repeat_password">
+                <source>label.repeat_password</source>
+                <target>Repeat Password</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

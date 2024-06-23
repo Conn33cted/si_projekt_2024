@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Category type.
+ * Tag type.
  */
 
 namespace App\Form\Type;
@@ -13,7 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class CategoryType.
+ * Class TagType.
  */
 class TagType extends AbstractType
 {
@@ -36,13 +35,16 @@ class TagType extends AbstractType
                 'attr' => [
                     'maxlength' => 64,
                 ],
-            ])
-            ->add('slug', TextType::class, [
+            ]);
+
+        if (!$options['exclude_slug']) {
+            $builder->add('slug', TextType::class, [
                 'label' => 'tag.slug',
                 'attr' => [
                     'maxlength' => 64,
                 ],
             ]);
+        }
     }
 
     /**
@@ -52,7 +54,10 @@ class TagType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => Tag::class]);
+        $resolver->setDefaults([
+            'data_class' => Tag::class,
+            'exclude_slug' => false,
+        ]);
     }
 
     /**

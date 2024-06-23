@@ -66,7 +66,6 @@ class UserPanelController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if (password_verify($form['password']->getData(), $user->getPassword())) {
-                echo 'IKSDE';
                 $newPassword = $this->passwordHasher->hashPassword($user, $form['new_password']->getData());
                 $user->setPassword($newPassword);
                 $this->userRepository->save($user, true);

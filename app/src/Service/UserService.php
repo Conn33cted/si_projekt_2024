@@ -15,14 +15,7 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class UserService implements UserServiceInterface
 {
-    /**
-     * User repository.
-     */
     private UserRepository $userRepository;
-
-    /**
-     * Paginator.
-     */
     private PaginatorInterface $paginator;
 
     /**
@@ -60,7 +53,7 @@ class UserService implements UserServiceInterface
      */
     public function save(User $user): void
     {
-        $this->userRepository->save($user);
+        $this->userRepository->save($user, true);
     }
 
     /**
@@ -70,6 +63,6 @@ class UserService implements UserServiceInterface
      */
     public function delete(User $user): void
     {
-        $this->userRepository->remove($user);
+        $this->userRepository->remove($user, true);
     }
 }

@@ -7,6 +7,9 @@
         <span>{{ app.user.email }}</span>
         <a href="{{ path('app_logout') }}" class="btn btn-danger ms-2">{{ 'action_logout'|trans }}</a>
         <a href="{{ path('change_password') }}" class="btn btn-warning ms-2">{{ 'button.change_password'|trans }}</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('user_index') }}" class="btn btn-info ms-2">{{ 'label.users'|trans }}</a>
+        {% endif %}
     {% else %}
         <a href="{{ path('app_login') }}" class="btn btn-primary ms-2">{{ 'action_login'|trans }}</a>
         <a href="{{ path('app_register') }}" class="btn btn-success ms-2">{{ 'action_register'|trans }}</a>

@@ -123,7 +123,7 @@ class TagController extends AbstractController
      * @return Response HTTP response
      */
     #[Route('/{id}/edit', name: 'tag_edit', requirements: ['id' => '[1-9]\d*'], methods: 'GET|PUT')]
-    #[IsGranted('ROLE_ADMIN', subject: 'tag')]
+    #[IsGranted('EDIT', subject: 'tag')]
     public function edit(Request $request, Tag $tag): Response
     {
         $form = $this->createForm(
@@ -132,6 +132,7 @@ class TagController extends AbstractController
             [
                 'method' => 'PUT',
                 'action' => $this->generateUrl('tag_edit', ['id' => $tag->getId()]),
+                'exclude_slug' => true, // Wyklucz pole 'slug'
             ]
         );
         $form->handleRequest($request);

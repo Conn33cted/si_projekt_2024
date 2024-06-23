@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Class UserController.
@@ -32,15 +33,22 @@ class UserController extends AbstractController
     private TranslatorInterface $translator;
 
     /**
+     * Password hasher.
+     */
+    private UserPasswordHasherInterface $passwordHasher;
+
+    /**
      * Constructor.
      *
-     * @param UserServiceInterface $userService User service
-     * @param TranslatorInterface  $translator  Translator
+     * @param UserServiceInterface        $userService    User service
+     * @param TranslatorInterface         $translator     Translator
+     * @param UserPasswordHasherInterface $passwordHasher Password hasher
      */
-    public function __construct(UserServiceInterface $userService, TranslatorInterface $translator)
+    public function __construct(UserServiceInterface $userService, TranslatorInterface $translator, UserPasswordHasherInterface $passwordHasher)
     {
         $this->userService = $userService;
         $this->translator = $translator;
+        $this->passwordHasher = $passwordHasher;
     }
 
     /**
@@ -84,32 +92,20 @@ class UserController extends AbstractController
     #[Route('/create', name: 'user_create', methods: 'GET|POST')]
     public function create(Request $request): Response
     {
-        /** @var User $user */
-        $user = $this->getUser();
         $user = new User();
-        $user->setAuthor($user);
-        $form = $this->createForm(
-            UserType::class,
-            $user,
-            ['action' => $this->generateUrl('user_create')]
-        );
+        $form = $this->createForm(UserType::class, $user, ['action' => $this->generateUrl('user_create')]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($this->passwordHasher->hashPassword($user, $form->get('password')->getData()));
             $this->userService->save($user);
 
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.created_successfully')
-            );
+            $this->addFlash('success', $this->translator->trans('message.created_successfully'));
 
             return $this->redirectToRoute('user_index');
         }
 
-        return $this->render(
-            'user/create.html.twig',
-            ['form' => $form->createView()]
-        );
+        return $this->render('user/create.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -123,34 +119,27 @@ class UserController extends AbstractController
     #[Route('/{id}/edit', name: 'user_edit', requirements: ['id' => '[1-9]\d*'], methods: 'GET|PUT')]
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(
-            UserType::class,
-            $user,
-            [
-                'method' => 'PUT',
-                'action' => $this->generateUrl('user_edit', ['id' => $user->getId()]),
-            ]
-        );
+        $form = $this->createForm(UserType::class, $user, [
+            'method' => 'PUT',
+            'action' => $this->generateUrl('user_edit', ['id' => $user->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData()) {
+                $user->setPassword($this->passwordHasher->hashPassword($user, $form->get('password')->getData()));
+            }
             $this->userService->save($user);
 
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.edited_successfully')
-            );
+            $this->addFlash('success', $this->translator->trans('message.edited_successfully'));
 
             return $this->redirectToRoute('user_index');
         }
 
-        return $this->render(
-            'user/edit.html.twig',
-            [
-                'form' => $form->createView(),
-                'user' => $user,
-            ]
-        );
+        return $this->render('user/edit.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -164,33 +153,23 @@ class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'user_delete', requirements: ['id' => '[1-9]\d*'], methods: 'GET|DELETE')]
     public function delete(Request $request, User $user): Response
     {
-        $form = $this->createForm(
-            FormType::class,
-            $user,
-            [
-                'method' => 'DELETE',
-                'action' => $this->generateUrl('user_delete', ['id' => $user->getId()]),
-            ]
-        );
+        $form = $this->createForm(FormType::class, $user, [
+            'method' => 'DELETE',
+            'action' => $this->generateUrl('user_delete', ['id' => $user->getId()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userService->delete($user);
 
-            $this->addFlash(
-                'success',
-                $this->translator->trans('message.deleted_successfully')
-            );
+            $this->addFlash('success', $this->translator->trans('message.deleted_successfully'));
 
             return $this->redirectToRoute('user_index');
         }
 
-        return $this->render(
-            'user/delete.html.twig',
-            [
-                'form' => $form->createView(),
-                'user' => $user,
-            ]
-        );
+        return $this->render('user/delete.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user,
+        ]);
     }
 }

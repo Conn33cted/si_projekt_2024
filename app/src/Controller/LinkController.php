@@ -33,7 +33,7 @@ class LinkController extends AbstractController
     }
 
     /**
-     * Redirect to the original URL based on the shortened URL.
+     * Redirect to the original URL.
      *
      * @param string $shortenOut Shortened URL suffix
      *
