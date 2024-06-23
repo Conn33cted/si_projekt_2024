@@ -1,0 +1,77 @@
+
+Found 0 of 54 files that can be fixed in 1.735 seconds, 18.00 MB memory used
+ ----------- ---------- ------------------------------ ------------------------------ 
+  State       Domain     Id                             Message Preview (en)          
+ ----------- ---------- ------------------------------ ------------------------------ 
+   missing    messages   message.updated_successfully   message.updated_successfully  
+   missing    messages   title.category_create          title.category_create         
+   missing    messages   action.create                  action.create                 
+   missing    messages   title.category_delete          title.category_delete         
+   missing    messages   title.category_edit            title.category_edit           
+   missing    messages   title.category_list            title.category_list           
+   missing    messages   ID                             ID                            
+   missing    messages   Tytuł                          Tytuł                         
+   missing    messages   Data Utworzenia                Data Utworzenia               
+   missing    messages   Data Aktualizacji              Data Aktualizacji             
+   missing    messages   action.show                    action.show                   
+   missing    messages   message.delete_confirm         message.delete_confirm        
+   missing    messages   title.category_details         title.category_details        
+   missing    messages   title.create_task              title.create_task             
+   missing    messages   button.create                  button.create                 
+   missing    messages   button.back_to_list            button.back_to_list           
+   missing    messages   title.delete_task              title.delete_task             
+   missing    messages   message.confirm_delete         message.confirm_delete        
+   missing    messages   button.delete                  button.delete                 
+   missing    messages   button.cancel                  button.cancel                 
+   missing    messages   title.edit_task                title.edit_task               
+   missing    messages   button.save_changes            button.save_changes           
+   missing    messages   title.task_list                title.task_list               
+   missing    messages   Data aktualizacji              Data aktualizacji             
+   missing    messages   Kategoria                      Kategoria                     
+   missing    messages   title.task_details             title.task_details            
+ ----------- ---------- ------------------------------ ------------------------------ 
+
+ ----------- ---------- ------------------------------ ------------------------------ ------------------------------- 
+  State       Domain     Id                             Message Preview (pl)           Fallback Message Preview (en)  
+ ----------- ---------- ------------------------------ ------------------------------ ------------------------------- 
+   missing    messages   message.updated_successfully   message.updated_successfully   message.updated_successfully   
+   missing    messages   title.category_create          title.category_create          title.category_create          
+   missing    messages   action.create                  action.create                  action.create                  
+   missing    messages   title.category_delete          title.category_delete          title.category_delete          
+   missing    messages   title.category_edit            title.category_edit            title.category_edit            
+   missing    messages   title.category_list            title.category_list            title.category_list            
+   missing    messages   ID                             ID                             ID                             
+   missing    messages   Tytuł                          Tytuł                          Tytuł                          
+   missing    messages   Data Utworzenia                Data Utworzenia                Data Utworzenia                
+   missing    messages   Data Aktualizacji              Data Aktualizacji              Data Aktualizacji              
+   missing    messages   action.show                    action.show                    action.show                    
+   missing    messages   message.delete_confirm         message.delete_confirm         message.delete_confirm         
+   missing    messages   title.category_details         title.category_details         title.category_details         
+   missing    messages   title.create_task              title.create_task              title.create_task              
+   missing    messages   button.create                  button.create                  button.create                  
+   missing    messages   button.back_to_list            button.back_to_list            button.back_to_list            
+   missing    messages   title.delete_task              title.delete_task              title.delete_task              
+   missing    messages   message.confirm_delete         message.confirm_delete         message.confirm_delete         
+   missing    messages   button.delete                  button.delete                  button.delete                  
+   missing    messages   button.cancel                  button.cancel                  button.cancel                  
+   missing    messages   title.edit_task                title.edit_task                title.edit_task                
+   missing    messages   button.save_changes            button.save_changes            button.save_changes            
+   missing    messages   title.task_list                title.task_list                title.task_list                
+   missing    messages   Data aktualizacji              Data aktualizacji              Data aktualizacji              
+   missing    messages   Kategoria                      Kategoria                      Kategoria                      
+   missing    messages   title.task_details             title.task_details             title.task_details             
+ ----------- ---------- ------------------------------ ------------------------------ ------------------------------- 
+
+[notice] Migrating up to DoctrineMigrations\Version20240617100705
+[notice] finished in 725ms, used 24M memory, 2 migrations executed, 14 sql queries
+
+ [OK] Successfully migrated to version: DoctrineMigrations\Version20240617100705                                        
+
+
+   > purging database
+   > loading App\DataFixtures\AppFixtures
+   > loading App\DataFixtures\CategoryFixtures
+   > loading App\DataFixtures\ShortenFixtures
+   > loading App\DataFixtures\TagFixtures
+   > loading App\DataFixtures\UserFixtures
+   > loading App\DataFixtures\TaskFixtures
