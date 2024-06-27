@@ -72,7 +72,7 @@
                     <td>{{ shorten.id }}</td>
                     <td>{{ shorten.shortenIn }}</td>
                     <td><a href="{{ path('link_index', {shortenOut: shorten.shortenOut}) }}" target="_blank">https://shortening.it/{{ shorten.shortenOut }}</a></td>
-                    <td>{{ shorten.addDate|date('Y/m/d') }}</td>
+                    <td>{{ shorten.addDate|format_date('long') }}</td>
                     <td>{{ shorten.clickCounter }}</td>
                     <td>
                         {% for tag in shorten.tags %}
