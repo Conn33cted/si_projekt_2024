@@ -9,9 +9,9 @@
         <h3>{{ 'label.title'|trans }}</h3>
         <p>{{ record.title }}</p>
         <h3>{{ 'label.created_at'|trans }}</h3>
-        <p>{{ record.createdAt|date('Y-m-d') }}</p>
+        <p>{{ record.createdAt|format_date('long') }}</p>
         <h3>{{ 'label.updated_at'|trans }}</h3>
-        <p>{{ record.updatedAt|date('Y-m-d') }}</p>
+        <p>{{ record.updatedAt|format_date('long') }}</p>
         <h3>{{ 'label.shorten_to_tag'|trans }}</h3>
         <p>
             {% for shorten in record.shorten %}

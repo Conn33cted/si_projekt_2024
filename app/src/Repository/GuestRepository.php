@@ -1,6 +1,7 @@
 <?php
-
-/**Guest User Repository*/
+/**
+ * Guest repository.
+ */
 
 namespace App\Repository;
 
@@ -29,10 +30,10 @@ class GuestRepository extends ServiceEntityRepository
     }
 
     /**
-     * Function Save.
+     * Save a guest entity.
      *
-     * @param Guest $entity Entity
-     * @param bool  $flush  Flush - false
+     * @param Guest $entity Entity to save
+     * @param bool  $flush  Whether to flush changes immediately
      */
     public function save(Guest $entity, bool $flush = false): void
     {
@@ -44,10 +45,10 @@ class GuestRepository extends ServiceEntityRepository
     }
 
     /**
-     * Function Remove.
+     * Remove a guest entity.
      *
      * @param Guest $entity Entity to remove
-     * @param bool  $flush  Flush
+     * @param bool  $flush  Whether to flush changes immediately
      */
     public function remove(Guest $entity, bool $flush = false): void
     {

@@ -28,7 +28,7 @@ class ShortenFixtures extends Fixture
     protected ObjectManager $manager;
 
     /**
-     * Load.
+     * Load data fixtures with the passed EntityManager.
      *
      * @param ObjectManager $manager Persistence object manager
      */
@@ -36,18 +36,23 @@ class ShortenFixtures extends Fixture
     {
         $this->faker = Factory::create();
         for ($i = 0; $i < 10; ++$i) {
+            // Create a new Guest entity
+            $guestUser = new Guest();
+            $guestUser->setGuestEmail($this->faker->email);
+            $guestUser->setIdentifier($this->faker->ipv4);
+            $guestUser->setCreationCount($this->faker->numberBetween(0, 2));
+            $manager->persist($guestUser);
+
+            // Create a new Shorten entity
             $shorten = new Shorten();
             $shorten->setShortenIn($this->faker->sentence);
             $shorten->setShortenOut($this->faker->randomNumber(4));
-            $shorten->setClickCounter($this->faker->numerify);
-            $guestUser = new Guest();
-            $guestUser->setGuestEmail('guest@example.com');
+            $shorten->setClickCounter($this->faker->numberBetween(0, 100));
             $shorten->setGuest($guestUser);
             $shorten->setAddDate(
                 \DateTimeImmutable::createFromMutable($this->faker->dateTimeBetween('-100 days', '-1 days'))
             );
             $manager->persist($shorten);
-            $manager->persist($guestUser);
         }
 
         $manager->flush();

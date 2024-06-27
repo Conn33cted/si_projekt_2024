@@ -1,6 +1,8 @@
 <?php
 
-/**Entity Guest*/
+/**
+ * Entity Guest.
+ */
 
 namespace App\Entity;
 
@@ -21,10 +23,16 @@ class Guest
     #[ORM\Column(length: 255)]
     private ?string $guestEmail = null;
 
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $identifier = null;
+
+    #[ORM\Column(type: 'integer')]
+    private int $creationCount = 0;
+
     /**
-     * Function getId.
+     * Get the ID of the guest.
      *
-     * @return int|null Return of id
+     * @return int|null ID
      */
     public function getId(): ?int
     {
@@ -32,9 +40,9 @@ class Guest
     }
 
     /**
-     * Function getGuestEmail.
+     * Get the guest email.
      *
-     * @return string|null Return of GuestEmail
+     * @return string|null Guest email
      */
     public function getGuestEmail(): ?string
     {
@@ -42,15 +50,63 @@ class Guest
     }
 
     /**
-     * Set Guest Email.
+     * Set the guest email.
      *
      * @param string $guestEmail Guest email
      *
-     * @return $this Entity
+     * @return $this
      */
     public function setGuestEmail(string $guestEmail): self
     {
         $this->guestEmail = $guestEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get the guest identifier.
+     *
+     * @return string|null Guest identifier
+     */
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    /**
+     * Set the guest identifier.
+     *
+     * @param string $identifier Guest identifier
+     *
+     * @return $this
+     */
+    public function setIdentifier(string $identifier): self
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    /**
+     * Get the creation count.
+     *
+     * @return int Creation count
+     */
+    public function getCreationCount(): int
+    {
+        return $this->creationCount;
+    }
+
+    /**
+     * Set the creation count.
+     *
+     * @param int $creationCount Creation count
+     *
+     * @return $this
+     */
+    public function setCreationCount(int $creationCount): self
+    {
+        $this->creationCount = $creationCount;
 
         return $this;
     }
